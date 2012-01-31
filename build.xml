@@ -1,0 +1,58 @@
+<project name="jcontacts" default="jar" basedir=".">
+    <description>
+        A contact manager with a TrayIcon
+    </description>
+    <property name="src" location="src"/>
+    <property name="resources" location="resources"/>
+
+    <property name="build" location="build"/>
+    <property name="libs" location="libs"/>
+    <property name="build_resources" location="build/resources"/>
+    <property name="jar" location="jcontacts.jar"/>
+
+<!--INIT-->
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build_resources}"/>
+    </target>
+
+<!--DATA-->
+    <target name="data" depends="init" description="Add resources directory">
+        <copy todir="${build_resources}">
+            <fileset dir="${resources}"/>
+        </copy>
+    </target>
+
+<!--LIBRARIES-->
+    <target name="libraries" depends="init" description="Add librares">
+        <unjar dest="${build}">
+            <fileset dir="${libs}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </unjar>
+        <delete dir="${build}/META-INF"/>
+    </target>
+
+<!--COMPILE-->
+    <target name="compile" depends="init" description="Compile the source">
+        <javac srcdir="${src}" destdir="${build}" 
+               debug="true" includeantruntime="no">
+        </javac>
+    </target>
+
+<!--JAR-->
+    <target name="jar" depends="compile, libraries, data" description="generate the distribution" >
+        <jar jarfile="${jar}" basedir="${build}">
+            <manifest>
+                <attribute name="Main-Class" value="JContacts"/>
+            </manifest>
+        </jar>
+    </target>
+
+<!--CLEAN-->
+    <target name="clean" description="clean up" >
+        <delete dir="${build}"/>
+        <delete file="${jar}"/>
+    </target>
+</project>
