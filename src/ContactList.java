@@ -51,9 +51,6 @@ import javax.swing.UIManager;
 // TODO:
 // - create a form for editing contact information
 // - create initial SQLite backend
-// - find Google docs and/or Dropbox library for Java
-//   - Google:  Contacts example now in libs
-//   - Dropbox: Read API instructions for Java
 
 public class ContactList
 extends JFrame
@@ -71,6 +68,8 @@ implements ActionListener, ChangeListener, KeyListener
     private JTextField searchField = new JTextField();
 
     private JPanel listPanel = new JPanel(new BorderLayout());
+    private JTree tree = new JTree();
+    private JScrollPane scrollArea = new JScrollPane(tree);
     
     private JPanel buttonPanel = new JPanel(new BorderLayout());
     private JButton addButton = new JButton("+");
@@ -90,6 +89,7 @@ implements ActionListener, ChangeListener, KeyListener
         add(searchPanel, BorderLayout.NORTH);
 
         //listPanel.add
+        add(scrollArea, BorderLayout.CENTER);
 
         buttonPanel.add(addButton, BorderLayout.WEST);
         buttonPanel.add(removeButton, BorderLayout.EAST);

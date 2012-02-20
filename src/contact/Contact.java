@@ -1,3 +1,5 @@
+package contact;
+
 import java.util.Hashtable;
 
 public class Contact
@@ -26,14 +28,14 @@ public class Contact
         return ((ContactID)(table.get("id"))).toLong();
     }
 
-    public ContactData get(String key)
-    {
-        return table.get(key);
-    }
-
     public void set(String key, ContactData data)
     {
         table.put(key, data);
+    }
+
+    public ContactData get(String key)
+    {
+        return table.get(key);
     }
 }
 
