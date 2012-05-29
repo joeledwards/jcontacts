@@ -1,4 +1,4 @@
-<project name="jcontacts" default="jar" basedir=".">
+<project name="jcontacts" default="test" basedir=".">
     <description>
         A contact manager with a TrayIcon
     </description>
@@ -9,6 +9,27 @@
     <property name="libs" location="libs"/>
     <property name="build_resources" location="build/resources"/>
     <property name="jar" location="jcontacts.jar"/>
+    <property name="main_class" value="JContacts"/>
+
+    <path id="compile.class.path">
+        <pathelement location="${src}"/>
+        <fileset dir="${libs}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="jar.class.path">
+        <fileset dir="${libs}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test.class.path">
+        <pathelement location="${build}" />
+        <fileset dir="${libs}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
 
 <!--INIT-->
     <target name="init">
@@ -24,6 +45,13 @@
         </copy>
     </target>
 
+<!--COMPILE-->
+    <target name="compile" depends="init" description="Compile the source">
+        <javac srcdir="${src}" destdir="${build}" debug="on" includeantruntime="no">
+            <classpath refid="compile.class.path"/>
+        </javac>
+    </target>
+
 <!--LIBRARIES-->
     <target name="libraries" depends="init" description="Add librares">
         <unjar dest="${build}">
@@ -34,25 +62,27 @@
         <delete dir="${build}/META-INF"/>
     </target>
 
-<!--COMPILE-->
-    <target name="compile" depends="init" description="Compile the source">
-        <javac srcdir="${src}" destdir="${build}" 
-               debug="true" includeantruntime="no">
-        </javac>
+<!--TESTS-->
+    
+    <target name="test" depends="clean, data, compile" description="test DOM3" >
+        <java classname="${main_class}" classpathref="test.class.path" fork="true">
+            <arg value="books.xsd" />
+            <arg value="books.xml" />
+        </java>
     </target>
 
-<!--JAR-->
-    <target name="jar" depends="compile, libraries, data" description="generate the distribution" >
+<!--PACKAGE-->
+    <target name="package" depends="clean, data, libraries, compile" description="generate the distribution" >
         <jar jarfile="${jar}" basedir="${build}">
             <manifest>
-                <attribute name="Main-Class" value="JContacts"/>
+                <attribute name="Main-Class" value="${main_class}"/>
             </manifest>
         </jar>
     </target>
 
 <!--CLEAN-->
     <target name="clean" description="clean up" >
-        <delete dir="${build}"/>
         <delete file="${jar}"/>
+        <delete dir="${build}"/>
     </target>
 </project>

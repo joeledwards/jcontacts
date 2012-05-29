@@ -22,9 +22,17 @@ implements ActionListener, MouseListener
     private TrayIcon    icon;
     private PopupMenu   menu;
 
-    private MenuItem        quitItem;
-    private Image           quitImage;
-    private MenuShortcut    quitShortcut;
+    private ContactList list;
+
+    private Image bookImage;
+
+    private MenuItem     listItem;
+    private Image        listImage;
+    private MenuShortcut listShortcut;
+
+    private MenuItem     quitItem;
+    private Image        quitImage;
+    private MenuShortcut quitShortcut;
 
     public static void main(String args[])
     {
@@ -41,12 +49,19 @@ implements ActionListener, MouseListener
         tray = SystemTray.getSystemTray();
         menu = new PopupMenu();
 
-        quitImage = Resources.getAsImage("resources/icons/contacts.png", 20, 20);
-        icon = new TrayIcon(quitImage, "Close Contacts", menu);
-        quitShortcut = new MenuShortcut(KeyEvent.VK_A, false);
+        bookImage = Resources.getAsImage("resources/icons/address-book-128.png", 20, 20);
 
+        icon = new TrayIcon(bookImage, "Contacts", menu);
+
+        listShortcut = new MenuShortcut(KeyEvent.VK_O, false);
+        listItem = new MenuItem("Open List", listShortcut);
+        listItem.addActionListener(this);
+
+        quitShortcut = new MenuShortcut(KeyEvent.VK_Q, false);
         quitItem = new MenuItem("Quit", quitShortcut);
         quitItem.addActionListener(this);
+
+        menu.add(listItem);
         menu.add(quitItem);
 
         try {
@@ -62,6 +77,9 @@ implements ActionListener, MouseListener
     {
         if (event.getSource() == quitItem) {
             System.exit(1);
+        } else if (event.getSource() == listItem) {
+            list = new ContactList("Contacts"); 
+            list.show();
         }
     }
 

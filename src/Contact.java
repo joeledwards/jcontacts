@@ -23,12 +23,12 @@ public class Contact
         return id;
     }
 
-    public void set(String key, ContactData data)
+    public void set(String key, String value)
     {
-        table.put(key, data);
+        table.put(key, value);
     }
 
-    public ContactData get(String key)
+    public String get(String key)
     {
         return table.get(key);
     }
