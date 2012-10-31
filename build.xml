@@ -9,7 +9,7 @@
     <property name="libs" location="libs"/>
     <property name="build_resources" location="build/resources"/>
     <property name="jar" location="jcontacts.jar"/>
-    <property name="main_class" value="JContacts"/>
+    <property name="main_class" value="com.edcraft.contact.JContacts"/>
 
     <path id="compile.class.path">
         <pathelement location="${src}"/>

@@ -1,4 +1,4 @@
-package contact;
+package com.edcraft.contact;
 
 import java.util.Hashtable;
 

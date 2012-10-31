@@ -1,3 +1,4 @@
+package com.edcraft.contact;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -27,24 +28,28 @@ import javax.swing.JTree;
 import javax.swing.UIManager;
 
 /*
-------------------------------------------------------------------------
-| Contact Form                                                     | X |
-------------------------------------------------------------------------
-|                ______________________________________________        |
-|  Name:        |_Joel_Edwards_________________________________|       |
-|                ______________________________________________        |
-|  Tags:        |_USGS,_ASL,_GSN_______________________________|       |
-|                ______________________________________________        |
-|  Work Phone:  |_(505)_853-2582_______________________________|       |
-|                ______________________________________________        |
-|  Home Phone:  |_(505)_918-2106_______________________________|       |
-|                ______________________________________________        |
-|  Work E-mail: |_jdedwards@ed-craft.com_______________________|       |
-|                ______________________________________________        |
-|  Home E-mail: |_joeledwards@gmail.com________________________|       |
-|                                                                      |
-| [Discard]                                                   [Update] |
-------------------------------------------------------------------------
+------------------------------------------------
+| Contacts                                 | X |
+------------------------------------------------
+|   ___________________________________        |
+|  |_el________________________________|       |
+|                                              |
+|  -----------------------------------------   |
+|  | Art Bell                            |^|   |
+|  | Joel Edwards                        | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     | |   |
+|  |                                     |v|   |
+|  -----------------------------------------   |
+|                                              |
+| [+]                                      [-] |
+------------------------------------------------
 */
 
 
@@ -52,7 +57,7 @@ import javax.swing.UIManager;
 // - create a form for editing contact information
 // - create initial SQLite backend
 
-public class ContactForm
+public class ContactList
 extends JFrame
 implements ActionListener,
            ChangeListener,
@@ -79,7 +84,7 @@ implements ActionListener,
     private JButton removeButton = new JButton("-");
 
 
-    public ContactForm(String title)
+    public ContactList(String title)
     {
         super(title);
         this.title = title;

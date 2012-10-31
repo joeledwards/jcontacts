@@ -1,3 +1,4 @@
+package com.edcraft.contact;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -27,28 +28,24 @@ import javax.swing.JTree;
 import javax.swing.UIManager;
 
 /*
-------------------------------------------------
-| Contacts                                 | X |
-------------------------------------------------
-|   ___________________________________        |
-|  |_el________________________________|       |
-|                                              |
-|  -----------------------------------------   |
-|  | Art Bell                            |^|   |
-|  | Joel Edwards                        | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     | |   |
-|  |                                     |v|   |
-|  -----------------------------------------   |
-|                                              |
-| [+]                                      [-] |
-------------------------------------------------
+------------------------------------------------------------------------
+| Contact Form                                                     | X |
+------------------------------------------------------------------------
+|                ______________________________________________        |
+|  Name:        |_Joel_Edwards_________________________________|       |
+|                ______________________________________________        |
+|  Tags:        |_Customer_Centrix,_Loadstorm__________________|       |
+|                ______________________________________________        |
+|  Work Phone:  |_(505)_853-2582_______________________________|       |
+|                ______________________________________________        |
+|  Home Phone:  |_(505)_918-2106_______________________________|       |
+|                ______________________________________________        |
+|  Work E-mail: |_joel@ed-craft.com____________________________|       |
+|                ______________________________________________        |
+|  Home E-mail: |_joeledwards@gmail.com________________________|       |
+|                                                                      |
+| [Discard]                                                   [Update] |
+------------------------------------------------------------------------
 */
 
 
@@ -56,7 +53,7 @@ import javax.swing.UIManager;
 // - create a form for editing contact information
 // - create initial SQLite backend
 
-public class ContactList
+public class ContactForm
 extends JFrame
 implements ActionListener,
            ChangeListener,
@@ -83,7 +80,7 @@ implements ActionListener,
     private JButton removeButton = new JButton("-");
 
 
-    public ContactList(String title)
+    public ContactForm(String title)
     {
         super(title);
         this.title = title;
