@@ -63,13 +63,11 @@ implements ActionListener,
            ChangeListener,
            KeyListener
 {
-
- // Class Components
-    private String title;
+	private static final long serialVersionUID = -1875694201593610543L;
+	
+	// Class Components
     private Terminator terminator = null;
-
-    private int currentTab = 0;
-    private boolean isDoubleBuffered = false;
+    private ContactForm form;
 
     private JPanel searchPanel = new JPanel(new BorderLayout());
     private JTextField searchField = new JTextField();
@@ -87,7 +85,6 @@ implements ActionListener,
     public ContactList(String title)
     {
         super(title);
-        this.title = title;
         setMinimumSize(new Dimension(400, 400));
 
         setLayout(new BorderLayout());
@@ -103,14 +100,14 @@ implements ActionListener,
         add(buttonPanel, BorderLayout.SOUTH);
         pack();
 
-        terminator = new Terminator(this);
+        terminator = Terminator.createTerminator(this);
         this.addWindowListener(terminator);
 
      // Make sure keyboard shortcut combinations work everywhere
         this.addKeyListener(this);
         this.getContentPane().addKeyListener(this);
-        addButton.addKeyListener(this);
-        removeButton.addKeyListener(this); 
+        addButton.addActionListener(this);
+        removeButton.addActionListener(this); 
 
         updateGui();
     }
@@ -129,6 +126,13 @@ implements ActionListener,
     public void actionPerformed(ActionEvent evt)
     {
         Object source = evt.getSource();
+        if (source == addButton) {
+        	System.out.format("Add button clicked\n");
+            form = new ContactForm("Edit Contact"); 
+            form.setVisible(true);
+        } else if (source == removeButton) {
+        	System.out.format("Remove button clicked\n");
+        }
     }
 
  // StateListener

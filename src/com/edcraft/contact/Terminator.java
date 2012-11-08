@@ -10,16 +10,29 @@ public class Terminator
 extends WindowAdapter
 {
     private Window window = null;
+    private boolean exit = false;
 
     public Terminator(Window window)
     {
         this.window = window;
     }
+    
+    public static Terminator createTerminator(Window window)
+    {   
+    	Terminator terminator = new Terminator(window);
+    	return terminator;
+    }
+    
+    public static Terminator createExitingTerminator(Window window)
+    {
+    	Terminator terminator = new Terminator(window);
+    	terminator.exit = true;
+    	return terminator;
+    }
 
     public void windowClosing(WindowEvent evt) {
-        boolean close = true;
-        if (close) {
-            window.setVisible(false);
+        window.setVisible(false);
+        if (exit) {
             System.exit(0);
         }
     }

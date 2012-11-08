@@ -1,13 +1,23 @@
 package com.edcraft.contact;
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -59,14 +69,30 @@ implements ActionListener,
            ChangeListener,
            KeyListener
 {
+    public static final int MINIMUM_WIDTH  = 400;
+    public static final int MINIMUM_HEIGHT = 300;
+    public static final int DEFAULT_WIDTH  = 400;
+    public static final int DEFAULT_HEIGHT = 300; 
 
  // Class Components
-    private String title;
     private Terminator terminator = null;
+    
+    private boolean newContact = true;
+    private int contactId = -1;
 
-    private int currentTab = 0;
-    private boolean isDoubleBuffered = false;
-
+    private JLabel		nameLabel;
+    private JTextField	nameField;
+    private JLabel    	tagsLabel;
+    private JTextField	tagsField;
+    private JLabel    	workPhoneLabel;
+    private JTextField	workPhoneField;
+    private JLabel    	homePhoneLabel;
+    private JTextField	homePhoneField;
+    private JLabel    	workEmailLabel;
+    private JTextField	workEmailField;
+    private JLabel    	homeEmailLabel;
+    private JTextField	homeEmailField;
+    
     private JPanel searchPanel = new JPanel(new BorderLayout());
     private JTextField searchField = new JTextField();
 
@@ -76,40 +102,258 @@ implements ActionListener,
     private JScrollPane scrollArea = new JScrollPane(list);
     
     private JPanel buttonPanel = new JPanel(new BorderLayout());
-    private JButton addButton = new JButton("+");
-    private JButton removeButton = new JButton("-");
-
+    
+    private JButton cancelButton = new JButton("Discard");
+    private JButton saveButton = new JButton("Save"); // Save / Update
 
     public ContactForm(String title)
     {
         super(title);
-        this.title = title;
-        setMinimumSize(new Dimension(400, 400));
-
+        
+        setMinimumSize(new Dimension(MINIMUM_WIDTH, MINIMUM_HEIGHT));
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	    Container contentPane = getContentPane();
         setLayout(new BorderLayout());
+	    //contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+	    
+        // Filters
+        JPanel contactContainer = new JPanel(new BorderLayout());
+        contactContainer.setBorder(new EmptyBorder(5,3,0,3));
+        GridBagLayout contactGrid = new GridBagLayout();
+        JPanel contactPanel = new JPanel(contactGrid);
+        contactPanel.setBorder(new TitledBorder(new EtchedBorder(), "Filters"));
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.WEST;
 
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        add(searchPanel, BorderLayout.NORTH);
+        c.insets.top = 0;
+        c.insets.left = 5;
+        c.insets.bottom = 5;
+        c.insets.right = 5;
 
-        //listPanel.add
-        add(scrollArea, BorderLayout.CENTER);
+        // create
+        nameField = new JTextField();
+        //nameField.setColumns(6);
+        nameField.setEditable(true);
+        nameField.setSize(DEFAULT_WIDTH, 1);
+        nameLabel = new JLabel("Name: ", JLabel.TRAILING); 
+        nameLabel.setLabelFor(nameField);
+        // add to grid
+        c.gridx = 0; c.gridy = 0;
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.NONE;
+        contactGrid.setConstraints(nameLabel, c);
+        contactPanel.add(nameLabel);
+        c.gridx = 1; c.gridy = 0;
+        c.weightx = 50.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contactGrid.setConstraints(nameField, c);
+        contactPanel.add(nameField);
 
-        buttonPanel.add(addButton, BorderLayout.WEST);
-        buttonPanel.add(removeButton, BorderLayout.EAST);
+        // create
+        tagsField = new JTextField();
+        //tagsField.setColumns(6);
+        tagsField.setEditable(true);
+        tagsField.setSize(DEFAULT_WIDTH, 1);
+        tagsLabel = new JLabel("Station: ", JLabel.TRAILING); 
+        tagsLabel.setLabelFor(tagsField);
+        // add to grid
+        c.gridx = 0; c.gridy = 1;
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.NONE;
+        contactGrid.setConstraints(tagsLabel, c);
+        contactPanel.add(tagsLabel);
+        c.gridx = 1; c.gridy = 1;
+        c.weightx = 50.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contactGrid.setConstraints(tagsField, c);
+        contactPanel.add(tagsField);
+
+        // create
+        workPhoneField = new JTextField();
+        //workPhoneField.setColumns(6);
+        workPhoneField.setEditable(true);
+        workPhoneField.setSize(DEFAULT_WIDTH, 1);
+        workPhoneLabel = new JLabel("Work Phone: ", JLabel.TRAILING); 
+        workPhoneLabel.setLabelFor(workPhoneField);
+        // add to grid
+        c.gridx = 0; c.gridy = 2;
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.NONE;
+        contactGrid.setConstraints(workPhoneLabel, c);
+        contactPanel.add(workPhoneLabel);
+        c.gridx = 1; c.gridy = 2;
+        c.weightx = 50.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contactGrid.setConstraints(workPhoneField, c);
+        contactPanel.add(workPhoneField);
+
+        // create
+        homePhoneField = new JTextField();
+        //homePhoneField.setColumns(6);
+        homePhoneField.setEditable(true);
+        homePhoneField.setSize(DEFAULT_WIDTH, 1);
+        homePhoneLabel = new JLabel("Home Phone: ", JLabel.TRAILING); 
+        homePhoneLabel.setLabelFor(homePhoneField);
+        // add to grid
+        c.gridx = 0; c.gridy = 3;
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.NONE;
+        contactGrid.setConstraints(homePhoneLabel, c);
+        contactPanel.add(homePhoneLabel);
+        c.gridx = 1; c.gridy = 3;
+        c.weightx = 50.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contactGrid.setConstraints(homePhoneField, c);
+        contactPanel.add(homePhoneField);
+
+        // create
+        workEmailField = new JTextField();
+        //workEmailField.setColumns(6);
+        workEmailField.setEditable(true);
+        workEmailField.setSize(DEFAULT_WIDTH, 1);
+        workEmailLabel = new JLabel("Work E-Mail: ", JLabel.TRAILING); 
+        workEmailLabel.setLabelFor(workEmailField);
+        // add to grid
+        c.gridx = 0; c.gridy = 4;
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.NONE;
+        contactGrid.setConstraints(workEmailLabel, c);
+        contactPanel.add(workEmailLabel);
+        c.gridx = 1; c.gridy = 4;
+        c.weightx = 50.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contactGrid.setConstraints(workEmailField, c);
+        contactPanel.add(workEmailField);
+
+        c.insets.top = 0;
+        c.insets.bottom = 8;
+
+        // create
+        homeEmailField = new JTextField();
+        //homeEmailField.setColumns(6);
+        homeEmailField.setEditable(true);
+        homeEmailField.setSize(DEFAULT_WIDTH, 1);
+        homeEmailLabel = new JLabel("Home E-Mail: ", JLabel.TRAILING); 
+        homeEmailLabel.setLabelFor(homeEmailField);
+        // add to grid
+        c.gridx = 0; c.gridy = 5;
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.NONE;
+        contactGrid.setConstraints(homeEmailLabel, c);
+        contactPanel.add(homeEmailLabel);
+        c.gridx = 1; c.gridy = 5;
+        c.weightx = 50.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        //c.gridwidth = GridBagConstraints.REMAINDER;
+        contactGrid.setConstraints(homeEmailField, c);
+        contactPanel.add(homeEmailField);
+
+        contactContainer.add(contactPanel, BorderLayout.CENTER);
+        add(contactContainer, BorderLayout.CENTER);
+
+        buttonPanel.add(cancelButton, BorderLayout.WEST);
+        buttonPanel.add(saveButton, BorderLayout.EAST);
         add(buttonPanel, BorderLayout.SOUTH);
         pack();
 
-        terminator = new Terminator(this);
+        terminator = Terminator.createTerminator(this);
         this.addWindowListener(terminator);
 
      // Make sure keyboard shortcut combinations work everywhere
         this.addKeyListener(this);
         this.getContentPane().addKeyListener(this);
-        addButton.addKeyListener(this);
-        removeButton.addKeyListener(this); 
+        cancelButton.addActionListener(this);
+        saveButton.addActionListener(this); 
 
         updateGui();
     }
+    
+    // Contact ID
+    public void setContactId(int contactId) {
+    	this.contactId = contactId;
+    }
+    
+    public int getContactId() {
+    	return contactId;
+    }
+    
+    // New contact
+    public boolean isNewContact() {
+    	return newContact;
+    }
+    
+    public void clearNewContact() {
+    	newContact = false;
+    }
+    
+    public void setNewContact() {
+    	newContact = true;
+    }
+    
+    // Name
+    public void setName(String name) {
+    	nameField.setText(name);
+    }
+    
+    public String getName() {
+    	return nameField.getText();
+    }
+
+    // Tags
+    public void setTags(Collection<String> tags) {
+    	String tagString = "";
+    	boolean first = true;
+    	for (String tag: tags) {
+    		if (tag.length() > 0) {
+    			tagString += first ? "" : ", " + tag;
+    			first = false;
+    		}
+    	}
+    	nameField.setText(tagString);
+    }
+    
+    public Collection<String> getTags() {
+    	ArrayList<String> tags = new ArrayList<String>();
+    	for (String tag: nameField.getText().split(",")) {
+    		tags.add(tag.trim());
+    	}
+    	return tags;
+    }
+    
+    // Phone Numbers
+    public void setWorkPhone(String workPhone) {
+    	workPhoneField.setText(workPhone);
+    }
+    
+    public String getWorkPhone() {
+    	return workPhoneField.getText();
+    }
+
+    public void setHomePhone(String homePhone) {
+    	homePhoneField.setText(homePhone);
+    }
+    
+    public String getHomePhone() {
+    	return homePhoneField.getText();
+    }
+
+    // E-Mail Addresses
+    public void setWorkEmail(String workEmail) {
+    	workEmailField.setText(workEmail);
+    }
+    
+    public String getWorkEmail() {
+    	return workEmailField.getText();
+    }
+
+    public void setHomeEmail(String homeEmail) {
+    	homeEmailField.setText(homeEmail);
+    }
+    
+    public String getHomeEmail() {
+    	return homeEmailField.getText();
+    }
+
 
  // Quit the Application
     private void quit() {

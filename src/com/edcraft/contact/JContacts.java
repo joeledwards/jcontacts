@@ -24,6 +24,7 @@ implements ActionListener, MouseListener
     private PopupMenu   menu;
 
     private ContactList list;
+    private ContactForm form;
 
     private Image bookImage;
 
@@ -80,7 +81,7 @@ implements ActionListener, MouseListener
             System.exit(1);
         } else if (event.getSource() == listItem) {
             list = new ContactList("Contacts"); 
-            list.show();
+            list.setVisible(true);
         }
     }
 
